@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#440B10">
+    <meta name="description" content="The Racquettes Club Gamelogs">
+    <title>Login</title>
+
+    <!-- iOS PWA Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Racquettes Club">
+
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="icons/icon-180.png">
+
+    <!-- Standard -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/icons/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="assets/icons/header.png" alt="Badminton Tracker" class="header-logo">
+        </header>
+
+        <main class="auth-main">
+            <div class="auth-container">
+                <h2 class="auth-title">Enter Passcode</h2>
+                <p class="auth-subtitle">Please enter your passcode to access match insights</p>
+                
+                <form id="passcode-form" class="auth-form">
+                    <div class="form-group">
+                        <input 
+                            id="passcode-input" 
+                            class="auth-input" 
+                            placeholder="Enter passcode (minimum 16 characters)"
+                            minlength="16"
+                            autocomplete="off"
+                        />
+                    </div>
+                    <div id="error-message" class="error-message"></div>
+                    <button type="submit" id="submit-btn" class="primary-btn auth-btn">Submit</button>
+                </form>
+            </div>
+        </main>
+
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p class="loading-text">Loading data...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/encryption.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/dataFetcher.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/request.js"></script>
+</body>
+</html>
