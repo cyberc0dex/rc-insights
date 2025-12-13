@@ -1,6 +1,6 @@
 {
   "name": "Insights",
-  "short_name": "insights",
+  "short_name": "Insights",
   "description": "The Racquettes Club Gamelogs",
   "start_url": "https://cyberc0dex.github.io/rc-insights/",
   "display": "standalone",
