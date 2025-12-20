@@ -74,7 +74,7 @@ function setupPasscodeForm() {
         }
 
         // Passcode is valid, proceed to fetch and decrypt
-        await fetchAndDecryptData(passcode);
+        await fetchAndDecryptData(validation.passcode);
     });
 }
 
