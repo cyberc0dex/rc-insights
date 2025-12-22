@@ -1,26 +1,26 @@
 // service-worker.js - Service worker for system-insights
 
-const CACHE_NAME = 'rc-prod-v1.0.3';
+const CACHE_NAME = 'rc-prod-v1.0.4';
 const urlsToCache = [
-    './',
-    './index.html',
-    './request.html',
-    './css/styles.css',
-    './js/config.js',
-    './js/session.js',
-    '.js/encryption.js',
-    './js/storage.js',
-    './js/auth.js',
-    './js/dataFetcher.js',
-    './js/matchHistory.js',
-    './js/playerStats.js',
-    './js/app.js',
-    './js/request.js',
-    './manifest.json',
-    './assets/icons/icon-180.png',
-    './assets/icons/icon-192.png',
-    './assets/icons/icon-512.png',
-    './assets/icons/header.png'
+    '/',
+    '/index.html',
+    '/request.html',
+    '/css/styles.css',
+    '/js/config.js',
+    '/js/session.js',
+    '/js/encryption.js',
+    '/js/storage.js',
+    '/js/auth.js',
+    '/js/dataFetcher.js',
+    '/js/matchHistory.js',
+    '/js/playerStats.js',
+    '/js/app.js',
+    '/js/request.js',
+    '/manifest.json',
+    '/assets/icons/icon-180.png',
+    '/assets/icons/icon-192.png',
+    '/assets/icons/icon-512.png',
+    '/assets/icons/header.png'
 ];
 
 // Install event - cache all assets except data.enc
@@ -68,7 +68,7 @@ self.addEventListener('fetch', event => {
 
                 return fetch(fetchRequest).then(response => {
                     // Check if valid response
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
+                    if (!response || response.status !== 200) {
                         return response;
                     }
 
