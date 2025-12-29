@@ -1,4 +1,4 @@
-// auth.js - Authentication logic for system-insights
+// auth.js - Authentication logic
 
 // SHA-256 Hash function
 async function sha256Hash(str) {

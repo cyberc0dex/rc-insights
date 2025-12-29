@@ -1,25 +1,148 @@
-// app.js - Main application logic for system-insights (index.html)
+// app.js - Main application logic
 
 document.addEventListener('DOMContentLoaded', () => {
-    checkSessionAndRedirect();
-    setupTabNavigation();
-    registerServiceWorker();
-    
-    // Load Player Stats after DOM is ready
-    loadPlayerStats();
-    
-    // Start session expiration checker
-    startSessionExpirationChecker();
+    initializeApp();
 });
 
-function checkSessionAndRedirect() {
+function initializeApp() {
     // Check if session is valid
-    if (!isSessionValid()) {
-        // No valid session, redirect to request.html
-        window.location.href = 'request.html';
-        return;
+    if (isSessionValid()) {
+        // Show app screen
+        showAppScreen();
+        setupTabNavigation();
+        loadPlayerStats();
+        startSessionExpirationChecker();
+    } else {
+        // Show auth screen
+        showAuthScreen();
+        setupPasscodeForm();
+        checkOnlineStatus();
+        setupOnlineStatusListener();
+    }
+    
+    registerServiceWorker();
+}
+
+// ============ AUTH SCREEN FUNCTIONS ============
+
+function showAuthScreen() {
+    document.getElementById('auth-screen').style.display = 'block';
+    document.getElementById('app-screen').style.display = 'none';
+}
+
+function showAppScreen() {
+    document.getElementById('auth-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'block';
+}
+
+function checkOnlineStatus() {
+    const passcodeInput = document.getElementById('passcode-input');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorMessage = document.getElementById('error-message');
+
+    if (!isOnline()) {
+        passcodeInput.disabled = true;
+        submitBtn.disabled = true;
+        errorMessage.textContent = 'No internet available';
+        errorMessage.style.color = 'var(--text-secondary)';
+    } else {
+        passcodeInput.disabled = false;
+        submitBtn.disabled = false;
+        errorMessage.textContent = '';
     }
 }
+
+function setupOnlineStatusListener() {
+    window.addEventListener('online', () => {
+        checkOnlineStatus();
+    });
+
+    window.addEventListener('offline', () => {
+        checkOnlineStatus();
+    });
+}
+
+function setupPasscodeForm() {
+    const form = document.getElementById('passcode-form');
+    const passcodeInput = document.getElementById('passcode-input');
+    const errorMessage = document.getElementById('error-message');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        errorMessage.textContent = '';
+
+        if (!isOnline()) {
+            errorMessage.textContent = 'No internet available';
+            errorMessage.style.color = 'var(--text-secondary)';
+            return;
+        }
+
+        const passcode = passcodeInput.value.trim();
+
+        if (passcode.length < 16) {
+            errorMessage.textContent = 'Passcode must be at least 16 characters';
+            errorMessage.style.color = 'var(--error)';
+            return;
+        }
+
+        const validation = await validatePasscode(passcode);
+
+        if (!validation.valid) {
+            errorMessage.textContent = validation.error;
+            errorMessage.style.color = 'var(--error)';
+            passcodeInput.value = '';
+            return;
+        }
+
+        await fetchAndDecryptData(validation.passcode);
+    });
+}
+
+async function fetchAndDecryptData(passcode) {
+    const loadingScreen = document.getElementById('loading-screen');
+    const errorMessage = document.getElementById('error-message');
+    const passcodeInput = document.getElementById('passcode-input');
+
+    try {
+        loadingScreen.classList.add('show');
+
+        const startTime = Date.now();
+
+        const encryptedData = await fetchDataEnc();
+        const decryptedText = await decryptText(encryptedData, passcode);
+        const matchHistory = JSON.parse(decryptedText);
+
+        setDecryptedData(matchHistory);
+        setDecryptionKey(passcode);
+        setSessionTimestamp();
+
+        const elapsed = Date.now() - startTime;
+        const remainingTime = MIN_LOADING_DURATION - elapsed;
+
+        if (remainingTime > 0) {
+            await new Promise(resolve => setTimeout(resolve, remainingTime));
+        }
+
+        loadingScreen.classList.remove('show');
+        
+        // Show app screen instead of redirecting
+        showAppScreen();
+        setupTabNavigation();
+        loadPlayerStats();
+        startSessionExpirationChecker();
+
+    } catch (error) {
+        console.error('invalid data source');
+        
+        loadingScreen.classList.remove('show');
+        errorMessage.textContent = 'Failed to load data. Please try again.';
+        errorMessage.style.color = 'var(--error)';
+        passcodeInput.value = '';
+    }
+}
+
+// ============ APP SCREEN FUNCTIONS ============
 
 function setupTabNavigation() {
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -29,15 +152,12 @@ function setupTabNavigation() {
         button.addEventListener('click', () => {
             const tabName = button.getAttribute('data-tab');
 
-            // Remove active class from all buttons and contents
             tabButtons.forEach(btn => btn.classList.remove('active'));
             tabContents.forEach(content => content.classList.remove('active'));
 
-            // Add active class to clicked button and corresponding content
             button.classList.add('active');
             document.getElementById(tabName).classList.add('active');
 
-            // Load data for the selected tab
             loadTabData(tabName);
         });
     });
@@ -54,6 +174,19 @@ function loadTabData(tabName) {
     }
 }
 
+function startSessionExpirationChecker() {
+    setInterval(() => {
+        if (!isSessionValid()) {
+            clearSessionData();
+            showAuthScreen();
+            
+            // Reset form
+            document.getElementById('passcode-input').value = '';
+            document.getElementById('error-message').textContent = '';
+        }
+    }, 30000);
+}
+
 function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js')
@@ -64,15 +197,4 @@ function registerServiceWorker() {
                 console.log('Service Worker registration failed:', error);
             });
     }
-}
-
-function startSessionExpirationChecker() {
-    // Check every 30 seconds if session has expired
-    setInterval(() => {
-        if (!isSessionValid()) {
-            // Session expired, clear data and redirect
-            clearSessionData();
-            window.location.href = 'request.html';
-        }
-    }, 30000); // Check every 30 seconds
 }

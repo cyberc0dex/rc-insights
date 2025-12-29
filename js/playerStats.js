@@ -1,4 +1,4 @@
-// playerStats.js - Player Stats tab logic (read-only for system-insights)
+// playerStats.js - Player Stats tab logic
 
 function loadPlayerStats() {
     const matchHistory = getDecryptedData();

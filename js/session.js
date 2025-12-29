@@ -1,4 +1,4 @@
-// session.js - Session management for system-insights
+// session.js - Session management
 
 // Session storage keys (in-memory only, not localStorage)
 const SESSION_KEY = '__session_key__';

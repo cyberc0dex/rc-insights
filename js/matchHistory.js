@@ -1,4 +1,4 @@
-// matchHistory.js - Match History tab logic (read-only for system-insights)
+// matchHistory.js - Match History tab logic
 
 function loadMatchHistory() {
     populateDateDropdown();

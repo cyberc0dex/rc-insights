@@ -1,27 +1,24 @@
 // service-worker.js - Service worker for system-insights
 
-const CACHE_NAME = 'rc-prod-v1.0.5';
+const CACHE_NAME = 'rc-prod-v1.1.0';
 const urlsToCache = [
-    '/',
-    '/rc-insights',
-    '/rc-insights/index.html',
-    '/rc-insights/request.html',
-    '/rc-insights/css/styles.css',
-    '/rc-insights/js/config.js',
-    '/rc-insights/js/session.js',
-    '/rc-insights/js/encryption.js',
-    '/rc-insights/js/storage.js',
-    '/rc-insights/js/auth.js',
-    '/rc-insights/js/dataFetcher.js',
-    '/rc-insights/js/matchHistory.js',
-    '/rc-insights/js/playerStats.js',
-    '/rc-insights/js/app.js',
-    '/rc-insights/js/request.js',
-    '/rc-insights/manifest.json',
-    '/rc-insights/assets/icons/icon-180.png',
-    '/rc-insights/assets/icons/icon-192.png',
-    '/rc-insights/assets/icons/icon-512.png',
-    '/rc-insights/assets/icons/header.png'
+    './',
+    './index.html',
+    './css/styles.css',
+    './js/config.js',
+    './js/session.js',
+    './js/encryption.js',
+    './js/storage.js',
+    './js/auth.js',
+    './js/dataFetcher.js',
+    './js/matchHistory.js',
+    './js/playerStats.js',
+    './js/app.js',
+    './manifest.json',
+    './assets/icons/icon-180.png',
+    './assets/icons/icon-192.png',
+    './assets/icons/icon-512.png',
+    './assets/icons/header.png'
 ];
 
 // Install event - cache all assets except data.enc

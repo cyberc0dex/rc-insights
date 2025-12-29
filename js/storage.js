@@ -1,4 +1,4 @@
-// storage.js - Memory storage functions for system-insights (sessionStorage for cross-page persistence)
+// storage.js - Memory storage functions (sessionStorage for cross-page persistence)
 
 // Storage key
 const DECRYPTED_DATA_KEY = '__decrypted_data__';
