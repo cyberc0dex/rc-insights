@@ -40,6 +40,5 @@ async function decryptText(cipherTextB64, userKey) {
         key,
         ciphertext
     );
-    console.log(decoder.decode(decrypted));
     return decoder.decode(decrypted);
 }

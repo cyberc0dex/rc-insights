@@ -1,6 +1,6 @@
 // service-worker.js - Service worker for system-insights
 
-const CACHE_NAME = 'rc-prod-v1.1.1';
+const CACHE_NAME = 'rc-prod-v1.1.2';
 const urlsToCache = [
     './',
     './index.html',
